@@ -1,0 +1,10 @@
+<!doctype html><html><body>
+    <h1>Application Status</h1>
+    <p><b>Name:</b> {{ app.first_name }} {{ app.last_name }}</p>
+    <p><b>Email:</b> {{ app.email }}</p>
+    <p><b>Status:</b> {{ app.get_status_display }}</p>
+    {% if app.vm_id %}<p><b>VM ID:</b> {{ app.vm_id }}</p>{% endif %}
+    {% if app.staff_notes %}<p><b>Notes:</b> {{ app.staff_notes }}</p>{% endif %}
+    <p><small>Submitted: {{ app.created_at }}</small></p>
+    </body></html>
+    

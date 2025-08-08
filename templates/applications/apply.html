@@ -1,0 +1,6 @@
+<!doctype html><html><body>
+    <h1>VM Application</h1>
+    {% for m in messages %}<p>{{ m }}</p>{% endfor %}
+    <form method="post">{% csrf_token %}{{ form.as_p }}<button>Submit</button></form>
+    </body></html>
+    
