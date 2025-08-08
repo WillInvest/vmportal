@@ -1,11 +1,19 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = "django-insecure-change-this-later"
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]  # add your server IP when you deploy
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-insecure")
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+ALLOWED_HOSTS = [h.strip() for h in os.getenv("DJANGO_ALLOWED_HOSTS","").split(",") if h.strip()]
+
+# Static & media
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -32,7 +40,7 @@ ROOT_URLCONF = "vmportal.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],   # <-- use our templates folder
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -54,15 +62,12 @@ DATABASES = {
 }
 
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"   # change to "America/New_York" if you prefer
+TIME_ZONE = "UTC"  # or "America/New_York"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static"  # needed later for collectstatic
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Dev email: prints emails to the console (so you can see the approval/submit emails)
+# Dev email settings
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "vm-portal@example.edu"

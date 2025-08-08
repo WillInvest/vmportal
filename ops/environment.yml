@@ -1,0 +1,6 @@
+name: vmportal
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+prefix: /home/vmportal/miniconda/envs/vmportal

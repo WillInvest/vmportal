@@ -1,0 +1,31 @@
+[Unit]
+Description=Gunicorn for VM Portal (Django)
+After=network.target
+
+[Service]
+User=vmportal
+Group=www-data
+WorkingDirectory=/home/vmportal/vmportal
+Environment="PATH=/home/vmportal/miniconda/envs/vmportal/bin"
+# helpful: ensure old socket is removed before start
+ExecStartPre=/usr/bin/rm -f /run/gunicorn-vmportal/gunicorn.sock
+ExecStart=/home/vmportal/miniconda/envs/vmportal/bin/gunicorn \
+  --workers 3 \
+  --bind unix:/run/gunicorn-vmportal/gunicorn.sock \
+  --umask 007 \
+  --timeout 60 \
+  --access-logfile - \
+  --error-logfile - \
+  --log-level info \
+  vmportal.wsgi:application
+
+RuntimeDirectory=gunicorn-vmportal
+RuntimeDirectoryMode=0755
+
+Restart=on-failure
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
